@@ -1,0 +1,17 @@
+{
+    "manifest_version": 3,
+    "name": "Holo Status",
+    "version": "1.0",
+    "description": "see livestreams",
+    "permissions": ["storage"],
+    "host_permissions": ["https://www.googleapis.com/"],
+    "action": {
+      "default_popup": "index.html",
+      "default_icon": {
+        "16": "icon.png",
+        "48": "icon.png",
+        "128": "icon.png"
+      }
+    }
+  }
+  
