@@ -3,8 +3,17 @@
     "name": "Holo Status",
     "version": "1.0",
     "description": "see livestreams",
-    "permissions": ["storage"],
-    "host_permissions": ["https://www.googleapis.com/"],
+    "permissions":[
+      "https://youtube.com/*",
+      "https://www.googleapis.com/*",
+      "storage",
+      "activeTab"
+    ],
+    "host_permissions": [
+      "https://youtube.com/*",
+      "https://www.googleapis.com/",
+      "https://*/"
+    ],
     "action": {
       "default_popup": "index.html",
       "default_icon": {

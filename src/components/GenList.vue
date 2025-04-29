@@ -1,8 +1,20 @@
 <template>
+    <Toast position="top-center" >
+            <template #message="slotProps">
+                <div class="toast-content-container">
+                    <div class="toast-summary">
+                        <span>{{ slotProps.message.summary }}</span>
+                    </div>
+                    <div class="toast-detail">{{ slotProps.message.detail }}</div>
+                </div>
+            </template>
+        </Toast>
 
     <!-- Chanenls List -->
     <ScrollPanel class="scroll-panel">
-        <Accordion class="gen-list" v-if="!loading" :multiple="true">
+        <Skeleton v-if="loading" class="gen-list-loading"></Skeleton>
+
+        <Accordion class="gen-list" v-else-if="!loading" :multiple="true">
             <AccordionPanel v-for="(channelsList, genName) in hololiveChannels" :value="genName" :key="genName">
                 <AccordionHeader>
                     {{ genName }}
@@ -48,7 +60,7 @@
         <div class="popover-container">
             <span class="settings-header">Settings</span>
 
-            <FloatLabel variant="on">
+            <FloatLabel variant="on" class="input-api-key">
                 <InputText id="api-key-input" v-model="inputApiKey"/>
                 <label for="api-key-input">Youtube API Key</label>
             </FloatLabel>
@@ -78,11 +90,14 @@
     import Popover from 'primevue/popover';
     import FloatLabel from 'primevue/floatlabel';
     import InputText from 'primevue/inputtext';
+    import Skeleton from 'primevue/skeleton';
+
+    import { useToast } from 'primevue/usetoast';
 
     import 'primeicons/primeicons.css'; 
 
     import { hololiveChannels } from '../data/holoChannels.ts';
-    import { checkIfLive, getApiKey, saveApiKey } from '../api/youtubeAPI.ts';
+    import { checkIfLive } from '../api/youtubeData.ts';
 
     export default {
         name: 'GenList',
@@ -98,7 +113,8 @@
             Button,
             Popover,
             FloatLabel,
-            InputText
+            InputText,
+            Skeleton
         },
         data() {
             return {
@@ -108,8 +124,7 @@
         },
         setup() {
             const settingsPopup = ref();
-            const inputApiKey = ref('');
-            const apiKey = ref(null);
+            const toast = useToast();
 
             const toggleSettings = (event) => {
                 settingsPopup.value.toggle(event);
@@ -118,41 +133,27 @@
             return {
                 settingsPopup,
                 toggleSettings,
-                apiKey,
-                inputApiKey
+                toast
             };
         },
-        async created() {
-            this.apiKey = await getApiKey();
-            if(this.apiKey !== null) {
-                this.inputApiKey = this.apiKey;
-                for (let genName in this.hololiveChannels) {
-                    let channelsList = this.hololiveChannels[genName];
-                    for (let channel of channelsList) {
-                        channel.status = await this.checkStatus(channel.channelId);
-                    }
-                    this.loading = false;
+        async mounted() {
+            for (let genName in this.hololiveChannels) {
+                let channelsList = this.hololiveChannels[genName];
+                for (let channel of channelsList) {
+                    channel.status = await this.checkStatus(channel.channelId);
                 }
             }
-            else { 
-                console.log('no api key found');
-            }
-           
+            this.loading = false;
         },
         methods: {
             async checkStatus(channelId) {
                 return await checkIfLive(channelId);
             },
+
             async saveSettings(){
-                const response = await saveApiKey(this.inputApiKey);
-                if(response.status === 'success'){
-                    console.log('done');
-                    await this.loadChannels();
-                }
-                else {
-                    console.error(response.errorReason);
-                }
+               
             },
+
             async loadChannels() {
                 for (let genName in this.hololiveChannels) {
                     let channelsList = this.hololiveChannels[genName];
@@ -173,13 +174,13 @@
     }
 
     .channel-icon-live {
-        width: 85px;
+        width: 100px;
         height: 50px;
         margin-right: 10px;
     }
 
     .channel-icon-notlive {
-        width: 60px;
+        width: 100px;
         height: 50px;
         margin-right: 10px;
     }
@@ -190,10 +191,19 @@
         max-width: 500px;
     }
 
+    .gen-list-loading {
+        min-width: 500px;
+        max-width: 500px;
+        min-height: 150px; 
+        max-height: 150px; 
+    }
+
     .live-container {
         display: flex;
         flex-direction: column;
         align-items: center;
+        min-width: 165px;
+        max-width: 165px;
     }
 
     .channel-item {
@@ -234,6 +244,42 @@
         font-size: 12px;
         padding: 1px 6px;
         border-radius: 6px;
+    }
+
+    /* Settings Menu */
+
+    .popover-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .input-api-key {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .settings-header {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    #api-key-input {
+        min-width: 405px;
+        max-width: 405px;
+    }
+
+    /* Toast Notifications */
+    
+    .toast-content-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .toast-summary {
+        font-size: 18px;
+        font-weight: bold;
     }
 
 </style>

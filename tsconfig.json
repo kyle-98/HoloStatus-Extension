@@ -4,6 +4,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
+    "target": "ES2024",
     "types": ["vite/client"],
     "lib": ["esnext", "dom"],
     "outDir": "dist"

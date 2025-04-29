@@ -1,7 +1,7 @@
 export const hololiveChannels = {
     "Hololive EN": [
         { name: "Mori Calliope", channelId: "UCL_qhgtOy0dy1Agp8vkySQg", channelIcon: "https://yt3.googleusercontent.com/ZZuzZBS3JHrZz49K3ApCYQo1NQLhN3ApfW0R9hAaIfCLMfx5YTL51bOgJv0zk6Ikdngmmn0G=s160-c-k-c0x00ffffff-no-rj" },
-        { name: "Gawr Gura", channelId: "UCoSrY_IQQVpmIRZ9XfOeY4Q", channelIcon: "https://yt3.googleusercontent.com/6BCfAqi9yIpZbHLbw9BAWySvB3XZf9r8jFqudO5nSOsHoGzLhlKrm1M1uuMCRabi_pXGDzl7=s160-c-k-c0x00ffffff-no-rj" },
+        { name: "Gawr Gura", channelId: "UCoSrY_IQQVpmIRZ9Xf-y93g", channelIcon: "https://yt3.googleusercontent.com/6BCfAqi9yIpZbHLbw9BAWySvB3XZf9r8jFqudO5nSOsHoGzLhlKrm1M1uuMCRabi_pXGDzl7=s160-c-k-c0x00ffffff-no-rj" },
         { name: "Nanashi Mumei", channelId: "UC3n5uGu18FoCy23ggWWp8tA", channelIcon: "https://yt3.googleusercontent.com/ufO7pGRu0vUfA2FLPz7yN517i8wOYxAdcxB9nSTKKfiKhjec0ulSmwWmRA00KqVpOTIesgXhMA=s160-c-k-c0x00ffffff-no-rj" },
         { name: "Kiara Takanashi", channelId: "UCHsx4Hqa-1ORjQTh9TYDhww", channelIcon: "https://yt3.googleusercontent.com/vnzn_RiKneABPPnp1-0SO4IAZQRXqVsL5RNDQYGR9GhT-Flm47vM4UJeyGfn4U_gteKqJMBwNA=s160-c-k-c0x00ffffff-no-rj" },
         { name: "Ninomae Ina’nis", channelId: "UCMwGHR0BTZuLsmjY_NT5Pwg", channelIcon: "https://yt3.googleusercontent.com/hJ45UDEa_rKtqxjNcIcYYJ_3eBvl9Jj2H-gXHBwNDwKOcSvDLjSwgOVbU9tEbUQmpGnyGwQFLQ=s160-c-k-c0x00ffffff-no-rj" },
@@ -15,15 +15,15 @@ export const hololiveChannels = {
         { name: "Elizabeth Rose Bloodflame", channelId: "UCW5uhrG1eCBYditmhL0Ykjw", channelIcon: "https://yt3.googleusercontent.com/1aoKeoCGzuD7XK2U8nUIHfpynIOLecHxF7Adh09XshlrL9kne2uKGOllFcoA2iXBVVe51_V6E48=s160-c-k-c0x00ffffff-no-rj" },
         { name: "Gigi Murin", channelId: "UCDHABijvPBnJm7F-KlNME3w", channelIcon: "https://yt3.googleusercontent.com/VTrjE6XoUY0QRq9VgwPIADiUA1S2FYPvJ7qRpUpgix8JLiU-mjKwEtADjS35w9C21Yarxk9kKA=s160-c-k-c0x00ffffff-no-rj" },
         { name: "Cecilia Immergreen", channelId: "UCvN5h1ShZtc7nly3pezRayg", channelIcon: "https://yt3.googleusercontent.com/sSuJylnDA4Si69bKWVzwUhrOhgIkBCzGE6DHgDyHCJux8TKi7WU8GyKaKZHEN0a3QG7s2yJ399g=s160-c-k-c0x00ffffff-no-rj" },
-        { name: "Raora Panthera", channelId: "UCvN5h1ShZtc7nly3pezRayg", channelIcon: "https://yt3.googleusercontent.com/HKYI1ENbRIVyDgLVtpxOKyLAOEdOHWH__-JQu6Kj2dq0S9U-wTccKoZT0-4DBd21O0Cpo6NnlA=s160-c-k-c0x00ffffff-no-rj" },
+        { name: "Raora Panthera", channelId: "UCl69AEx4MdqMZH7Jtsm7Tig", channelIcon: "https://yt3.googleusercontent.com/HKYI1ENbRIVyDgLVtpxOKyLAOEdOHWH__-JQu6Kj2dq0S9U-wTccKoZT0-4DBd21O0Cpo6NnlA=s160-c-k-c0x00ffffff-no-rj" },
     ],
     "Hololive JP": [
-        { name: "Sakura Miko", channelId: "UCFhA4zD3xXjYvZgA9yQ7Qtw" },
-        { name: "Shirogane Noel", channelId: "UCdyqAaZDKHXg4Q6r4V4myGg" },
-        { name: "Inugami Korone", channelId: "UC1CfXB_kRs3C-zae1K2Bf2g" }
+        // { name: "Sakura Miko", channelId: "UCFhA4zD3xXjYvZgA9yQ7Qtw" },
+        // { name: "Shirogane Noel", channelId: "UCdyqAaZDKHXg4Q6r4V4myGg" },
+        // { name: "Inugami Korone", channelId: "UC1CfXB_kRs3C-zae1K2Bf2g" }
     ],
     "Hololive ID": [
-        { name: "Moona Hoshinova", channelId: "UCOhHOx5v5k6e1XgN9glI7KQ" },
-        { name: "Risu", channelId: "UCp7d5uZtTSG8vExsmwU2kTg" }
+        // { name: "Moona Hoshinova", channelId: "UCOhHOx5v5k6e1XgN9glI7KQ" },
+        // { name: "Risu", channelId: "UCp7d5uZtTSG8vExsmwU2kTg" }
     ]
 };

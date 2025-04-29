@@ -1,5 +1,5 @@
 <template>
-    <GenList/>
+    <GenList class="main-view"/>
 </template>
 
 <script>
@@ -15,5 +15,8 @@
 </script>
     
 <style scoped>
-    
+    .main-view {
+        min-width: 500px;
+        max-width: 500px;
+    }
 </style>
