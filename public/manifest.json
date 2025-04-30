@@ -2,16 +2,12 @@
     "manifest_version": 3,
     "name": "Holo Status",
     "version": "1.0",
-    "description": "see livestreams",
+    "description": "see hololive live statuses",
     "permissions":[
-      "https://youtube.com/*",
-      "https://www.googleapis.com/*",
       "storage",
       "activeTab"
     ],
     "host_permissions": [
-      "https://youtube.com/*",
-      "https://www.googleapis.com/",
       "https://*/"
     ],
     "action": {
