@@ -4,11 +4,10 @@
     "version": "1.0",
     "description": "see hololive live statuses",
     "permissions":[
-      "storage",
-      "activeTab"
+      "storage"
     ],
     "host_permissions": [
-      "https://*/"
+      "https://*.youtube.com/*"
     ],
     "action": {
       "default_popup": "index.html",
