@@ -1,7 +1,7 @@
 export const hololiveChannels = {
     "Hololive en": [
         { name: "Mori Calliope", channelId: "UCL_qhgtOy0dy1Agp8vkySQg", alumn: false },
-        { name: "Gawr Gura", channelId: "UCoSrY_IQQVpmIRZ9Xf-y93g", alumn: false },
+        { name: "Gawr Gura", channelId: "UCoSrY_IQQVpmIRZ9Xf-y93g", alumn: true },
         { name: "Nanashi Mumei", channelId: "UC3n5uGu18FoCy23ggWWp8tA", alumn: true },
         { name: "Kiara Takanashi", channelId: "@TakanashiKiara", alumn: false },
         { name: "Ninomae Ina'nis", channelId: "UCMwGHR0BTZuLsmjY_NT5Pwg", alumn: false },
