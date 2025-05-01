@@ -1,9 +1,7 @@
 # Information
----
 Browser extension to check the live status of Hololive members channels.
 
 ## Features
----
 The extension will load on first click, this will take some time because its not using youtube API for getting data from channels.
 - This will take ~ 30 seconds due to the volumne of channels included in the extension
 
@@ -12,16 +10,13 @@ The extension caches the results after the inital load. To fetch results again c
 - Do **NOT** spam the reload button, it will do nothing and has the potential for you to get timed out of youtube due to large volume of spam requests
 
 # Supported Browsers
----
 - Chrome *(135.0.7049.115)*
 - Firefox *(138.0)*
 
 # How to Install
----
 Before addition to chrome extensions store see below
 
 ## Chrome
----
 1. Unzip the ZIP file from releases page
     - Keep this in a location where you are not planning to move it
 2. Navigate to `chrome://extensions` in chrome
@@ -38,7 +33,6 @@ Before addition to chrome extensions store see below
 4. Select the manifest.json file from inside the folder you extracted from the zip file
 
 # Screenshots
----
 ![image](https://github.com/user-attachments/assets/bbd416ad-3d76-4728-b58a-0fc4adfb9e0f)
 ![image](https://github.com/user-attachments/assets/8b13cdf5-ce11-436d-bec0-4221db49a793)
 ![image](https://github.com/user-attachments/assets/beea5996-5fb1-4704-ac5f-4cdba342b09d)
