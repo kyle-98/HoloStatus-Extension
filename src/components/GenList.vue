@@ -11,6 +11,9 @@
         </template>
     </Toast>
 
+    <!-- <h1 class="header-text">Hololive Channels</h1> -->
+    <img src="../assets/hololive_logo.png" style="width:250px;height:80px;margin-bottom:10px;">
+
     <!-- Channels List -->
     <ScrollPanel class="scroll-panel">
         <Skeleton v-if="loading" class="gen-list-loading"></Skeleton>
@@ -95,7 +98,7 @@
     <!-- Settings Button and Popover -->
     <!-- <div class="bottom-buttons"> -->
         <!-- <Button icon="pi pi-cog" @click="toggleSettings" label="Settings" severity="contrast" /> -->
-    <Button icon="pi pi-refresh" @click="reloadData" label="Reload" severity="contrast" class="reload-btn" />
+    <Button icon="pi pi-refresh" @click="reloadData" label="Reload" severity="secondary" class="reload-btn" />
     <!-- </div> -->
     <!-- <Popover ref="settingsPopup">
         <div class="popover-container">
@@ -232,8 +235,8 @@ export default {
 
 <style scoped>
     .scroll-panel {
-        max-height: 450px;
-        min-height: 450px;
+        max-height: 400px;
+        min-height: 400px;
     }
 
     .channel-icon-live {
@@ -252,6 +255,12 @@ export default {
     .gen-list { 
         min-width: 500px;
         max-width: 500px;
+        backdrop-filter: blur(14px);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        padding: 0.5rem;
+        overflow: hidden;
     }
 
     .gen-list-loading {
@@ -342,6 +351,11 @@ export default {
 
     .reload-btn {
         margin-left: 10px;
+        opacity: 0.9;
+    }
+
+    .header-text {
+        font-size: 40px;
     }
 
 </style>

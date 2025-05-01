@@ -15,11 +15,11 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #649aff;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #619FB7;
 }
 
 body {
@@ -28,6 +28,15 @@ body {
   place-items: center;
   min-width: 500px;
   min-height: 100vh;
+  background-image: 
+    url('./assets/hololive_bkg.png'),
+    linear-gradient(135deg, rgba(141, 236, 251, 0.5), rgba(51, 153, 255, 0.5));
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-attachment: fixed;
+  min-height: 100vh;
+  margin: 0;
 }
 
 h1 {
@@ -46,7 +55,7 @@ h1 {
   transition: border-color 0.25s;
 }*/
 button:hover {
-  border-color: #646cff;
+  border-color: #619FB7;
 }
 button:focus,
 button:focus-visible {
@@ -66,6 +75,34 @@ button:focus-visible {
 
 .p-toast-top-center {
   max-width: 255px !important;
+}
+
+
+.p-accordioncontent-content, .p-accordionpanel-active {
+  background-color: rgba(0,0,0,0.4);
+  border-color: rgba(255,255,255,0.2)
+}
+
+.p-accordionpanel {
+  background-color: transparent !important;
+  border-color: transparent;
+  border-radius: 2px;
+}
+
+.p-accordionpanel:not(.p-accordionpanel-active):not(.p-disabled) > .p-accordionheader:hover {
+  background-color: rgba(0,0,0,0.4);
+}
+
+.p-accordionpanel:not(.p-disabled).p-accordionpanel-active > .p-accordionheader {
+  background-color: rgba(0,0,0,0.4);
+}
+
+.p-accordionheader {
+  background-color: rgba(0,0,0,0.4);
+}
+
+.p-dataview-content {
+  background: transparent;
 }
 
 @media (prefers-color-scheme: light) {
