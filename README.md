@@ -1,6 +1,9 @@
 # Information
 Browser extension to check the live status of Hololive members channels.
 
+
+# [DOWNLOAD HERE!!!](https://chromewebstore.google.com/detail/holo-status/okfcjoniefoibmademjmbeleooccapke)
+
 ## Features
 The extension will load on first click, this will take some time because its not using youtube API for getting data from channels.
 - This will take ~ 30 seconds due to the volumne of channels included in the extension
