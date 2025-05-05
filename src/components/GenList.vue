@@ -21,6 +21,87 @@
 
         <!-- Main display dropdowns of all channels separated by gens -->
         <Accordion class="gen-list" v-else :multiple="true">
+            <AccordionPanel>
+                <AccordionHeader>Oshis</AccordionHeader>
+                <AccordionContent>
+                    <DataView :value="oshiChannels" item-content-class="data-view-item">
+                        <template #list="{ items }">
+                            <div v-for="(item, idx) in items" :key="idx" class="channel-item">
+                                <Avatar
+                                    v-if="item.status?.live === true"
+                                    :image="item.status.profilePic"
+                                    size="xlarge"
+                                    alt="Channel Profile Picture"
+                                    shape="circle"
+                                    class="channel-icon-live"
+                                />
+                                <Avatar
+                                    v-else-if="item.status?.live === false"
+                                    :image="item.status.profilePic"
+                                    size="xlarge"
+                                    alt="Channel Profile Picture"
+                                    shape="circle"
+                                    class="channel-icon-notlive"
+                                />
+                                <div class="channel-details">
+                                    <div class="channel-name">{{ item.name }}</div>
+                                    <div class="channel-status">
+                                        <Tag
+                                            class="live-tag"
+                                            v-if="item.status?.live === false && item.alumn === false"
+                                            severity="secondary"
+                                            value="Offline"
+                                        />
+                                        <Tag
+                                            class="live-tag"
+                                            v-else-if="item.status?.live === true && item.alumn === false"
+                                            severity="success"
+                                            value="Live"
+                                        />
+                                        <Tag
+                                            class="live-tag"
+                                            v-else-if="item.alumn === true"
+                                            severity="secondary"
+                                        >
+                                            <i class="pi pi-graduation-cap" style="margin-right: 0.5rem;"></i>
+                                            Alumn
+                                        </Tag>
+                                        <Tag v-else class="live-tag" severity="warn" value="Error" />
+                                    </div>
+                                </div>
+                                <div class="live-info">
+                                    <div class="live-container">
+                                        <img
+                                            v-if="item.status?.live === true"
+                                            :src="item.status.preview"
+                                            alt="Live Thumbnail"
+                                            class="channel-thumbnail"
+                                        />
+                                        <a
+                                            v-if="item.status?.live === true"
+                                            style="font-size: 10px"
+                                            :href="`https://www.youtube.com/watch?v=${item.status.videoID}`"
+                                            target="_blank"
+                                        >
+                                            {{ item.status.title }}
+                                        </a>
+                                    </div>
+                                </div>
+                                <Button 
+                                    :icon="isOshi(item.name) ? 'pi pi-star-fill' : 'pi pi-star'" 
+                                    :severity="isOshi(item.name) ? 'warning' : 'secondary'"
+                                    class="favorite-btn"
+                                    @click="toggleOshis(item.name)" 
+                                    size="small"
+                                    style="margin-left: 10px;"
+                                    text
+                                    v-tooltip="isOshi(item.name) ? 'Remove from Oshis' : 'Add to Oshis'"
+                                />
+                            </div>
+                        </template>
+                    </DataView>
+                </AccordionContent>
+            </AccordionPanel>
             <AccordionPanel v-for="(channelsList, genName) in hololiveChannels" :value="genName" :key="genName">
                 <AccordionHeader>
                     {{ genName }}
@@ -47,6 +128,7 @@
                                 />
                                 <div class="channel-details">
                                     <div class="channel-name">{{ item.name }}</div>
+                                    
 
                                     <!-- Tag to store the current state of the channel -->
                                     <div class="channel-status">
@@ -93,6 +175,16 @@
                                         </a>
                                     </div>
                                 </div>
+
+                                <Button 
+                                    icon="pi pi-star" 
+                                    :severity="isOshi(item.name) ? 'warning' : 'secondary'"
+                                    class="favorite-btn"
+                                    @click="toggleOshis(item.name)" 
+                                    size="small"
+                                    text
+                                    style="margin-left: 10px;"
+                                />
                             </div>
                         </template>
                     </DataView>
@@ -101,16 +193,12 @@
         </Accordion>
     </ScrollPanel>
 
-    <!-- Loading Card (This will be shown when the extension is loading and will display what channel is being fetched in real time) -->
-    <Card v-if="loading" style="background-color: transparent;border-color:transparent;box-shadow:none;">
-        <template #title>
-            <div class="loading-info">
-                <p class="loading-static-text">Loading Channel -></p>
-                <p class="loading-channel-text"> {{ currLoadingChannel }}</p>
-
-            </div>
-        </template>
-    </Card>
+    
+    <!-- Loading Tag (This will be shown when the extension is loading and will display what channel is being fetched in real time) -->
+    <Tag v-if="loading" style="border" severity="secondary" class="loading-tag">
+        {{ currLoadingChannel }}
+    </Tag>
+    <br>
 
     <!-- Reload button -->
     <Button icon="pi pi-refresh" @click="reloadData" label="Reload" severity="secondary" class="reload-btn" />
@@ -162,8 +250,15 @@
                 hololiveChannels,
                 loading: true,
                 currLoadingChannel,
-                cacheDate
+                cacheDate,
+                oshiNames: []
             };
+        },
+        computed: {
+            oshiChannels() {
+                const allChannels = Object.values(this.hololiveChannels).flat();
+                return allChannels.filter(channel => this.oshiNames.includes(channel.name));
+            }
         },
         setup() {
             const toast = useToast();
@@ -174,6 +269,7 @@
         },
         mounted() {
             this.loadCachedChannels();
+            this.loadOshis();
         },
         methods: {
             async checkStatus(channelId) {
@@ -229,34 +325,55 @@
                 }
                 localStorage.setItem('hololiveCache', JSON.stringify(dataToCache));
             },
-
             // reload the data stored in the extension
             reloadData() {
                 this.loading = true;
                 this.loadChannels();
+            },
+
+            // Checkr if a specified channel is maked as a oshi
+            isOshi(name) {
+                return this.oshiNames.includes(name);
+            },
+
+            // Change the display state of oshi, triggered when user clicks button to favorite/unfavorite channel
+            toggleOshis(name) {
+                if (this.isOshi(name)) {
+                    this.oshiNames = this.oshiNames.filter(id => id !== name);
+                    this.toast.add({ severity: 'warn', summary: 'Oshi Update', detail: `Removed ${name} from oshis list`, life: 3500 });
+                } else {
+                    this.oshiNames.push(name);
+                    this.toast.add({ severity: 'success', summary: 'Oshi Update', detail: `Added ${name} to oshis list`, life: 3500 });
+                }
+                this.saveOshi();
+            },
+            
+            saveOshi() {
+                localStorage.setItem('hololiveFavorites', JSON.stringify(this.oshiNames));
+            },
+            loadOshis() {
+                const stored = localStorage.getItem('hololiveFavorites');
+                if (stored) {
+                    this.oshiNames = JSON.parse(stored);
+                }
             }
+            
+
         }
     };
 </script>
 
 <style scoped>
     .scroll-panel {
-        max-height: 400px;
-        min-height: 400px;
+        max-height: 350px;
+        min-height: 350px;
     }
 
-    .channel-icon-live {
-        width: 100px;
+    .channel-icon-live, .channel-icon-notlive {
+        width: 125px;
         height: 50px;
         margin-right: 10px;
     }
-
-    .channel-icon-notlive {
-        width: 100px;
-        height: 50px;
-        margin-right: 10px;
-    }
-
 
     .gen-list { 
         min-width: 500px;
@@ -351,10 +468,9 @@
         font-size: 40px;
     }
 
-    .loading-info {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+    .loading-tag {
+        margin-bottom: 10px;
     }
+    
 
 </style>
