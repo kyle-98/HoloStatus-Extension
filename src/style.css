@@ -44,16 +44,6 @@ h1 {
   line-height: 1.1;
 }
 
-/* button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}*/
 button:hover {
   border-color: #619FB7;
 }
@@ -103,6 +93,24 @@ button:focus-visible {
 
 .p-dataview-content {
   background: transparent;
+}
+
+.p-toast-message-success {
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px) !important;
+  color: white;
+  background-color: color-mix(in srgb,var(--p-green-500),transparent 60%);
+}
+
+.p-toast-message-warn {
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px) !important;
+  color: white;
+  background-color: color-mix(in srgb,var(--p-orange-500),transparent 60%);
+}
+
+.toast-content-container {
+  display: flex;
 }
 
 @media (prefers-color-scheme: light) {

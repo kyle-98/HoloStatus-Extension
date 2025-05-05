@@ -1,7 +1,10 @@
 export async function checkIfLive(input: string) {
+    // Function to get the channel ID and the profile picture
     async function getChannelInfo(handle: string) {
         try {
             var text = '';
+            // Check if the channel handle provided starts with the @ symbol
+                // This is used to handle the event that the channel ID is already stored in holoChannels.ts instead of the channel handle
             if (handle.startsWith('@')){
                 const response = await fetch(`https://www.youtube.com/${handle}`);
                 text = await response.text();
@@ -12,9 +15,9 @@ export async function checkIfLive(input: string) {
             }
             const parser = new DOMParser();
             const doc = parser.parseFromString(text, 'text/html');
-            const ogImageTag = doc.querySelector('meta[property="og:image"]');
+            const ogImageTag = doc.querySelector('meta[property="og:image"]'); // The content of this meta tag stores the link to the profile picture of the channel
             const profilePic = ogImageTag ? ogImageTag.getAttribute('content') : null;
-            const canonicalURLTag = doc.querySelector('link[rel="canonical"]');
+            const canonicalURLTag = doc.querySelector('link[rel="canonical"]'); // The content of this link element stores the full URL of the channel including the channel ID
             if (canonicalURLTag) {
                 const canonicalURL = canonicalURLTag.getAttribute('href');
                 if (canonicalURL) {
@@ -28,6 +31,7 @@ export async function checkIfLive(input: string) {
                 }
             }
 
+            // Even if channel ID cannot be found, return the profile picture URL as this should always be found
             return {
                 channelId: null,
                 pfp: profilePic
@@ -41,14 +45,16 @@ export async function checkIfLive(input: string) {
         }
     }
 
+    // Function to check if a youtube channel is live
     async function checkLiveStatus(channelId: string, pfp: string) {
         try {
+            // This will take the client to the current livestream of a channel if they are currently live, otherwise this will default redirect to the main homepage of the specified channel
             const response = await fetch(`https://youtube.com/channel/${channelId}/live`);
             const text = await response.text();
             
             const parser = new DOMParser();
             const doc = parser.parseFromString(text, 'text/html');
-            const canonicalURLTag = doc.querySelector('link[rel="canonical"]');
+            const canonicalURLTag = doc.querySelector('link[rel="canonical"]'); // This link element is populated when the channel is live and no redirect event happened
             if (canonicalURLTag === null || canonicalURLTag === undefined) {
                 return { 
                     live: false,
@@ -64,6 +70,7 @@ export async function checkIfLive(input: string) {
                  };
             }
 
+            // Ensure the link did not redirect the client to the homepage of the channel
             const isLive = canonicalURL.includes('/watch?v=');
             if (isLive) {
                 const match = text.match(/var ytInitialPlayerResponse =([\s\S]*?);var meta =/);
@@ -78,6 +85,7 @@ export async function checkIfLive(input: string) {
                 const jsonText = match[1].trim();
                 const json = JSON.parse(jsonText);
                 
+                // Avoid capturing waiting rooms or soon to be live rooms
                 const isOffline = json.playabilityStatus.status === "LIVE_STREAM_OFFLINE";
                 if (isOffline) {
                     return { 
