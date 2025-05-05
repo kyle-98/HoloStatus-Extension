@@ -1,6 +1,7 @@
 /// <reference types="chrome" />
 /// <reference types="firefox-webext-browser" />
 
+// This makes the extension both chrome and firefox compatible
 let storageApi: typeof chrome.storage.sync | typeof browser.storage.sync;
 
 if (typeof chrome !== undefined && chrome.storage){

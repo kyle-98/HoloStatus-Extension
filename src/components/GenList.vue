@@ -11,13 +11,15 @@
         </template>
     </Toast>
 
-    <!-- <h1 class="header-text">Hololive Channels</h1> -->
+    <!-- Hololive title image -->
     <img src="../assets/hololive_logo.png" style="width:250px;height:80px;margin-bottom:10px;">
 
     <!-- Channels List -->
     <ScrollPanel class="scroll-panel">
+        <!-- Skeleton template used to indicate loading -->
         <Skeleton v-if="loading" class="gen-list-loading"></Skeleton>
 
+        <!-- Main display dropdowns of all channels separated by gens -->
         <Accordion class="gen-list" v-else :multiple="true">
             <AccordionPanel v-for="(channelsList, genName) in hololiveChannels" :value="genName" :key="genName">
                 <AccordionHeader>
@@ -45,6 +47,8 @@
                                 />
                                 <div class="channel-details">
                                     <div class="channel-name">{{ item.name }}</div>
+
+                                    <!-- Tag to store the current state of the channel -->
                                     <div class="channel-status">
                                         <Tag
                                             class="live-tag"
@@ -69,6 +73,8 @@
                                         <Tag v-else class="live-tag" severity="warn" value="Error" />
                                     </div>
                                 </div>
+
+                                <!-- Thumbnail and title (Displayed if the channel is currently live) -->
                                 <div class="live-info">
                                     <div class="live-container">
                                         <img
@@ -95,142 +101,142 @@
         </Accordion>
     </ScrollPanel>
 
-    <!-- Settings Button and Popover -->
-    <!-- <div class="bottom-buttons"> -->
-        <!-- <Button icon="pi pi-cog" @click="toggleSettings" label="Settings" severity="contrast" /> -->
+    <!-- Loading Card (This will be shown when the extension is loading and will display what channel is being fetched in real time) -->
+    <Card v-if="loading" style="background-color: transparent;border-color:transparent;box-shadow:none;">
+        <template #title>
+            <div class="loading-info">
+                <p class="loading-static-text">Loading Channel -></p>
+                <p class="loading-channel-text"> {{ currLoadingChannel }}</p>
+
+            </div>
+        </template>
+    </Card>
+
+    <!-- Reload button -->
     <Button icon="pi pi-refresh" @click="reloadData" label="Reload" severity="secondary" class="reload-btn" />
-    <!-- </div> -->
-    <!-- <Popover ref="settingsPopup">
-        <div class="popover-container">
-            <span class="settings-header">Settings</span>
-            <Button icon="pi pi-save" @click="saveSettings" label="Save" />
-        </div>
-    </Popover> -->
+    
 </template>
 
 <script>
-import { ref } from 'vue';
+    import { ref } from 'vue';
 
-import ScrollPanel from 'primevue/scrollpanel';
-import Accordion from 'primevue/accordion';
-import AccordionPanel from 'primevue/accordionpanel';
-import AccordionHeader from 'primevue/accordionheader';
-import AccordionContent from 'primevue/accordioncontent';
-import DataView from 'primevue/dataview';
-import Tag from 'primevue/tag';
-import Avatar from 'primevue/avatar';
-import Button from 'primevue/button';
-import Popover from 'primevue/popover';
-import FloatLabel from 'primevue/floatlabel';
-import InputText from 'primevue/inputtext';
-import Skeleton from 'primevue/skeleton';
+    import ScrollPanel from 'primevue/scrollpanel';
+    import Accordion from 'primevue/accordion';
+    import AccordionPanel from 'primevue/accordionpanel';
+    import AccordionHeader from 'primevue/accordionheader';
+    import AccordionContent from 'primevue/accordioncontent';
+    import DataView from 'primevue/dataview';
+    import Tag from 'primevue/tag';
+    import Avatar from 'primevue/avatar';
+    import Button from 'primevue/button';
+    import Skeleton from 'primevue/skeleton';
+    import Card from 'primevue/card';
 
-import { useToast } from 'primevue/usetoast';
+    import { useToast } from 'primevue/usetoast';
 
-import 'primeicons/primeicons.css'; 
+    import 'primeicons/primeicons.css'; 
 
-import { hololiveChannels } from '../data/holoChannels.ts';
-import { checkIfLive } from '../api/youtubeData.ts';
+    import { hololiveChannels } from '../data/holoChannels.ts';
+    import { checkIfLive } from '../api/youtubeData.ts';
 
-export default {
-    name: 'GenList',
-    components: {
-        ScrollPanel,
-        Accordion,
-        AccordionPanel,
-        AccordionHeader,
-        AccordionContent,
-        DataView,
-        Tag,
-        Avatar,
-        Button,
-        Popover,
-        Skeleton
-    },
-    data() {
-        return {
-            hololiveChannels,
-            loading: true
-        };
-    },
-    setup() {
-        const settingsPopup = ref();
-        const toast = useToast();
-
-        const toggleSettings = (event) => {
-            settingsPopup.value.toggle(event);
-        };
-
-        return {
-            settingsPopup,
-            toggleSettings,
-            toast
-        };
-    },
-    mounted() {
-        this.loadCachedChannels();
-    },
-    methods: {
-        async checkStatus(channelId) {
-            return await checkIfLive(channelId);
+    export default {
+        name: 'GenList',
+        components: {
+            ScrollPanel,
+            Accordion,
+            AccordionPanel,
+            AccordionHeader,
+            AccordionContent,
+            DataView,
+            Tag,
+            Avatar,
+            Button,
+            Skeleton,
+            Card
         },
+        data() {
+            const currLoadingChannel = ref(''); // Store the current channel the extension is fetching the status of so it can be displayed
+            const cacheDate = ref(); // Store the date of the last cache storage event so it can be displayed
 
-        // async saveSettings() {
-        //     this.toast.add({
-        //         severity: 'success',
-        //         summary: 'Settings Saved',
-        //         detail: 'Your settings have been saved.',
-        //         life: 3000
-        //     });
-        // },
-
-        async loadChannels() {
-            for (let genName in this.hololiveChannels) {
-                let channelsList = this.hololiveChannels[genName];
-                for (let channel of channelsList) {
-                    channel.status = await this.checkStatus(channel.channelId);
-                }
-            }
-            this.cacheChannelData();
-            this.loading = false;
+            return {
+                hololiveChannels,
+                loading: true,
+                currLoadingChannel,
+                cacheDate
+            };
         },
+        setup() {
+            const toast = useToast();
 
-        async loadCachedChannels() {
-            const cached = localStorage.getItem('hololiveCache');
-            if (cached) {
-                try {
-                    const parsed = JSON.parse(cached);
-                    for (let gen in this.hololiveChannels) {
-                        const channelsList = this.hololiveChannels[gen];
-                        for (let i = 0; i < channelsList.length; i++) {
-                            channelsList[i].status = parsed[gen][i].status;
-                        }
+            return {
+                toast
+            };
+        },
+        mounted() {
+            this.loadCachedChannels();
+        },
+        methods: {
+            async checkStatus(channelId) {
+                return await checkIfLive(channelId);
+            },
+
+            // Call the checkIfLive function from youtubeData.ts to get the live status of the channels
+            async loadChannels() {
+                // Loop through the gens
+                for (let genName in this.hololiveChannels) {
+                    // Get a list of all channels in the specified gen
+                    let channelsList = this.hololiveChannels[genName];
+                    // Loop through the channels in the gen and use the channel id provided to get the current live status of the channel
+                    for (let channel of channelsList) {
+                        this.currLoadingChannel = channel.name;
+                        channel.status = await this.checkStatus(channel.channelId);
                     }
-                    this.loading = false;
-                    return;
-                } catch (e) {
-                    console.warn('Cache parsing failed. Loading live data instead.');
                 }
-            }
-            this.loadChannels();
-        },
+                this.currLoadingChannel = '';
+                this.cacheChannelData(); // Cache the loaded data into hololiveCache in browser cache
+                this.loading = false;
+            },
 
-        cacheChannelData() {
-            const dataToCache = {};
-            for (let gen in this.hololiveChannels) {
-                dataToCache[gen] = this.hololiveChannels[gen].map(channel => ({
-                    status: channel.status
-                }));
-            }
-            localStorage.setItem('hololiveCache', JSON.stringify(dataToCache));
-        },
+            // Load cached channels if they exist
+            async loadCachedChannels() {
+                const cached = localStorage.getItem('hololiveCache');
+                if (cached) {
+                    try {
+                        const parsed = JSON.parse(cached);
+                        for (let gen in this.hololiveChannels) {
+                            const channelsList = this.hololiveChannels[gen];
+                            for (let i = 0; i < channelsList.length; i++) {
+                                channelsList[i].status = parsed[gen][i].status;
+                            }
+                        }
+                        this.loading = false;
+                        return;
+                    } catch (e) {
+                        console.warn('Cache parsing failed. Loading live data instead.');
+                    }
+                }
+                this.loadChannels();
+            },
 
-        reloadData() {
-            this.loading = true;
-            this.loadChannels();
+            // Cache fetched channel data in hololiveCache in browser storage
+            cacheChannelData() {
+                const dataToCache = {};
+                // loop through all the gens and map their status -> name
+                for (let gen in this.hololiveChannels) {
+                    dataToCache[gen] = this.hololiveChannels[gen].map(channel => ({
+                        status: channel.status
+                    }));
+                }
+                localStorage.setItem('hololiveCache', JSON.stringify(dataToCache));
+            },
+
+            // reload the data stored in the extension
+            reloadData() {
+                this.loading = true;
+                this.loadChannels();
+            }
         }
-    }
-};
+    };
 </script>
 
 <style scoped>
@@ -318,19 +324,6 @@ export default {
         border-radius: 6px;
     }
 
-    /* Settings Menu */
-    .popover-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .settings-header {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
     /* Toast Notifications */
     .toast-content-container {
         display: flex;
@@ -356,6 +349,12 @@ export default {
 
     .header-text {
         font-size: 40px;
+    }
+
+    .loading-info {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
     }
 
 </style>
