@@ -19,10 +19,10 @@
     "@types/chrome": "^0.0.317",
     "@types/firefox-webext-browser": "^120.0.4",
     "@types/node": "^22.15.3",
-    "@vitejs/plugin-vue": "^5.2.2",
+    "@vitejs/plugin-vue": "^6.0.7",
     "@vue/tsconfig": "^0.7.0",
     "typescript": "~5.7.2",
-    "vite": "^6.3.1",
+    "vite": "^8.0.16",
     "vue-tsc": "^2.2.8"
   }
 }
